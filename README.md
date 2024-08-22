@@ -55,10 +55,10 @@ The program utilizes the Pi Pico's PIO to create a high-precision frequency coun
    - Copy the `frequency_counter_pio_reciprocal_with_interrupt.py` file to your Raspberry Pi Pico using your preferred method (e.g., Thonny, rshell, ampy).
 
 3. **Connect the Hardware**:
-   - **PWM Output Pin** (`PWM_OUTPUT_PIN_ABSOLUTE = 0`): Connect this to the pin generating the PWM signal you want to measure.
-   - **Input Pulse Pin** (`INPUT_PULSE_PIN_ABSOLUTE = 2`): Connect this to the pin where you want to measure the frequency.
-   - **Timing Pulse Pin** (`TIMING_PULSE_PIN_ABSOLUTE = 3`): This pin generates timing pulses to control the gate time.
-   - **Side-set Pin** (`SIDESET_PIN_ABSOLUTE = 1`): Controls the timing for starting and stopping the pulse counting.
+   - **PWM Output Pin** (`PWM_OUTPUT_PIN_ABSOLUTE = 0`): For testing PWM signal generated from the pico.
+   - **Input Pulse Pin** (`INPUT_PULSE_PIN_ABSOLUTE = 2`): Connect this to the pwm signal being measured.
+   - **Timing Pulse Pin** (`TIMING_PULSE_PIN_ABSOLUTE = 3`): This pin generates timing pulses to control the gate time, leave it disconnected.
+   - **Side-set Pin** (`SIDESET_PIN_ABSOLUTE = 1`): Controls the timing for starting and stopping the pulse counting, leave it disconnected.
 
 ## Key Code Components
 
