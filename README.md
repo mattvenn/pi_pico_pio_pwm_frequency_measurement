@@ -86,10 +86,12 @@ The program utilizes the Pi Pico's PIO to create a high-precision frequency coun
 
 2. **Monitor Output**:
 
-   - The program will output the measured frequency of the PWM signal in Hz, kHz, or MHz depending on the signal's frequency. Because the timing is hardware-linked and independent of the CPU, the measurements are highly accurate.
+   - The program will output the measured frequency of the PWM signal in Hz, kHz, or MHz depending on the signal's frequency. Because the timing is hardware-linked and independent of the CPU, the measurements are highly accurate. 
 
 3. **Adjusting Parameters**:
    - You can adjust the timing pulse frequency, the CPU frequency, and other parameters directly in the `main()` function or within the `timing_pulse_generator()` function.
+
+Note that if no input is detected, the program won't print anything.
 
 ## Project Structure
 
