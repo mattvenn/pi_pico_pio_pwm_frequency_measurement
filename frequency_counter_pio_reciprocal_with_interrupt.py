@@ -1,14 +1,16 @@
 from machine import Pin, PWM, freq
 from rp2 import asm_pio, StateMachine, PIO
+import time
+
 
 # Pin to generate the PWM signal, connect this pin to the INPUT_PULSE_PIN_ABSOLUTE pin
-PWM_OUTPUT_PIN = 20
+PWM_OUTPUT_PIN = 21
 # Pin to measure the frequency of the PWM signal
-INPUT_PULSE_PIN = 22
+INPUT_PULSE_PIN = 8
 # Pin to generate the timing pulses
-TIMING_PULSE_PIN = 19
+TIMING_PULSE_PIN = 22
 # Pin to set the side-set pin
-SIDESET_PIN = 21
+SIDESET_PIN = 23
 CPU_FREQUENCY = 125_000_000  # 125 MHz
 TIMING_PULSE_RATIO = 0x4  # 8 timing pulses for 1 gate time
 TIMING_PULSE_FREQUENCY = 8  # 8 Hz
@@ -16,6 +18,30 @@ TIMING_PULSE_FREQUENCY = 8  # 8 Hz
 TIMING_PULSE_SM_ID = 0
 PULSE_COUNTER_SM_ID = 1
 
+def enable_ring_osc():
+    print("reset")
+    ctrl_inc    = Pin(3, Pin.OUT)
+    ctrl_en     = Pin(4, Pin.OUT)
+    ctrl_rst_n  = Pin(2, Pin.OUT)
+
+    ctrl_inc.value(0)
+    ctrl_rst_n(1)
+    ctrl_en.value(0)
+    time.sleep_ms(10)
+    ctrl_rst_n(0)
+    time.sleep_ms(10)
+    ctrl_rst_n(1)
+    time.sleep_ms(10)
+
+    print("select")
+    for c in range(42):
+        ctrl_inc.value(1)
+        time.sleep_ms(1)
+        ctrl_inc.value(0)
+        time.sleep_ms(1)
+
+    print("enable")
+    ctrl_en.value(1)
 
 # PIO program to count pulses, the gate time is controlled a side-set pin set by another PIO program
 @asm_pio(autopush=True, push_thresh=32, fifo_join=PIO.JOIN_RX)
@@ -189,10 +215,13 @@ def main():
         # start the pulse counter
         pulse_counter.reset()
         pulse_counter.start()
+        print("pulse counter started")
 
+        enable_ring_osc()
         # Just print the timing pulse count
         while True:
             timing_pulse_count = pulse_counter.read_timing_count()
+            #print(timing_pulse_count)
             if timing_pulse_count == 1:
                 pulse_count = pulse_counter.read_pulse_count()
                 if (
